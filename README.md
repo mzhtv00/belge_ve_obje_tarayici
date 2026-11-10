@@ -20,7 +20,7 @@ python -m pip install ".[easyocr]"    # EasyOCR may download its models on first
 
 For 3D reconstruction, install COLMAP separately and install the Python
 dependencies with `python -m pip install ".[photogrammetry]"`. The combined
-`requirements.txt` also lists the 3D dependencies.
+`requirements.txt` includes NumPy, OpenCV headless, Open3D, and Trimesh.
 
 ## 2D document scanning
 
@@ -85,31 +85,42 @@ raises `ValueError`.
 
 ## 3D photogrammetry
 
-`photogrammetry_pipeline.py` reconstructs a dense point cloud from overlapping
-object photos with COLMAP, then filters the cloud and creates, repairs,
-decimates, and exports a mesh with Open3D and Trimesh.
+`object_scan_pipeline.py` validates a set of object photos, stages them in an
+isolated workspace, reconstructs a dense point cloud with COLMAP, then filters
+the cloud and creates, repairs, decimates, and exports a mesh with Open3D and
+Trimesh.
 
 Install the Python dependencies with `python -m pip install ".[photogrammetry]"`
-or `python -m pip install -r requirements.txt`. COLMAP is a separate
-application and must be available on `PATH` or passed as an executable path.
+or `python -m pip install -r requirements.txt`. Install the native COLMAP
+application separately and make it available on `PATH`. Dense
+`patch_match_stereo` requires a CUDA-enabled COLMAP build and a compatible GPU
+and driver. The `--cpu-features` option disables GPU only for SIFT feature
+extraction and matching; it does not make dense stereo CPU-only.
 
-Place 15–36 supported photos (`.jpg`, `.jpeg`, `.png`, `.tif`, `.tiff`, or
-`.bmp`) in an image directory. Capture a complete orbit with substantial
-overlap, diffuse lighting, and a textured/matte object and background.
+Place 15–36 JPEG, PNG, or TIFF photos (`.jpg`, `.jpeg`, `.png`, `.tif`, or
+`.tiff`) in an image directory. Capture a complete orbit with substantial
+overlap, diffuse lighting, and a textured/matte object and background. Inputs
+are validated for file size and image dimensions before being copied to a
+per-run workspace.
 
 ```powershell
-python .\photogrammetry_pipeline.py .\photos .\output
+python .\object_scan_pipeline.py --images .\captures --output .\exports --work-dir .\scan-work --method poisson --target-triangles 300000
 ```
 
-The output directory receives `model.stl`, `model.obj`, and a `work` directory
-containing COLMAP's intermediate files. Use `--method ball_pivoting` to select
-Ball Pivoting instead of Poisson, `--colmap` to provide COLMAP's full path, or
-`--help` to see additional processing options.
+Use `--method ball_pivoting` to select Ball Pivoting instead of Poisson,
+`--cpu-features` to disable GPU for SIFT only, `--scale-to-mm` to apply a scale
+factor to the resulting model, `--allow-open-mesh` to permit non-watertight
+exports, or `--help` for all options. The output directory receives STL and
+OBJ files plus a unique work directory with staged photos, COLMAP logs,
+intermediate reconstruction files, and the cleaned point cloud.
 
-The default mesh cap is 250,000 triangles, and both exported files are kept
-under 25 MB (25,000,000 bytes). `--max-faces` and `--max-file-size-mb` tune
-these limits. Hole repair fills simple boundary loops but cannot guarantee a
-watertight result for every scan; inspect the exported mesh before printing.
+The default image limits are 25 MiB per photo and 12,000 pixels per edge. The
+mesh target is 300,000 triangles and each export is limited to 25,000,000
+bytes. These are configurable operational limits, not official Tinkercad
+limits or guarantees that a model will import. Watertight output is required
+by default; repair fills small holes only, so review failed or critical meshes.
+Photogrammetry does not recover absolute physical scale: `--scale-to-mm` applies
+a user-provided factor when the source dimensions are known.
 
 ## Tests
 

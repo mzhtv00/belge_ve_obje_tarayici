@@ -10,7 +10,7 @@ readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
     "numpy>=1.24",
-    "opencv-python>=4.8",
+    "opencv-python-headless>=4.8",
     "Pillow>=10",
 ]
 
@@ -21,10 +21,10 @@ photogrammetry = ["open3d>=0.18", "trimesh>=4.0"]
 test = ["pytest>=8"]
 
 [project.scripts]
-photogrammetry-pipeline = "photogrammetry_pipeline:main"
+object-scan-pipeline = "object_scan_pipeline:main"
 
 [tool.setuptools]
-py-modules = ["photogrammetry_pipeline"]
+py-modules = ["object_scan_pipeline"]
 
 [tool.setuptools.packages.find]
 include = ["document_scanner*"]
