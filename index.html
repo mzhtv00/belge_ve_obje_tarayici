@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#111827">
+  <title>Mobil Tarama Stüdyosu</title>
+  <link rel="stylesheet" href="/static/styles.css">
+  <script type="importmap">
+    {"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js"}}
+  </script>
+  <script src="/static/dashboard.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="/">
+      <span class="brand-mark">MS</span>
+      <span><strong>Mobil Tarama</strong><small>Yerel çalışma alanı</small></span>
+    </a>
+    <span id="connection-status" class="connection"><i></i> Bağlanıyor</span>
+  </header>
+
+  <main class="layout">
+    <section class="intro">
+      <div>
+        <p class="eyebrow">MASAÜSTÜ KONTROL PANELİ</p>
+        <h1>Çekimlerini tek yerde yönet.</h1>
+        <p class="muted">Telefonu eşleştir, tarama modunu seç ve dosyalarını dışa aktar.</p>
+      </div>
+      <div class="mode-picker" role="group" aria-label="Tarama modu">
+        <button class="mode-button selected" data-mode="2d">2D Belge</button>
+        <button class="mode-button" data-mode="3d">3D Obje</button>
+      </div>
+    </section>
+
+    <section class="pairing card">
+      <div class="section-heading">
+        <div><p class="eyebrow">MOBİL BAĞLANTI</p><h2>Telefonunu eşleştir</h2></div>
+        <span class="pill">Aynı Wi-Fi ağı</span>
+      </div>
+      <div class="pairing-content">
+        <div class="qr-frame"><img id="session-qr" alt="Telefonla taramak için oturum QR kodu"></div>
+        <div class="pairing-copy">
+          <p>QR kodu telefonunun kamerasıyla okut. Açılan sayfadan canlı kamerayı başlatabilir veya fotoğraf seçebilirsin.</p>
+          <div class="url-row"><code id="mobile-url">Oturum hazırlanıyor…</code><button id="copy-url" class="button secondary" disabled>Bağlantıyı kopyala</button></div>
+          <p id="camera-hint" class="hint">Canlı kamera erişimi için telefon tarayıcısında HTTPS gerekir. HTTP bağlantısında kamera dosya seçici kullanılabilir.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-grid">
+      <div class="card">
+        <div class="section-heading">
+          <div><p class="eyebrow">ALINAN ÇEKİMLER</p><h2>Belgeler ve görüntüler</h2></div>
+          <span id="capture-count" class="pill">0 kayıt</span>
+        </div>
+        <label class="search-box"><span aria-hidden="true">⌕</span><input id="capture-search" type="search" placeholder="Dosya veya tarih ara…" autocomplete="off"></label>
+        <div id="captures" class="capture-list"><p class="empty">Henüz çekim yok. QR kodu telefonunla okut.</p></div>
+      </div>
+
+      <div class="card model-card">
+        <div class="section-heading">
+          <div><p class="eyebrow">CAD AKTARIMI</p><h2>3B modeller</h2></div>
+          <span class="pill">STL</span>
+        </div>
+        <label class="upload-button button secondary">
+          <input id="model-upload" type="file" accept=".stl,model/stl">
+          <span>STL modeli ekle</span>
+        </label>
+        <div id="models" class="model-list"><p class="empty">Henüz STL modeli eklenmedi.</p></div>
+        <div class="preview-wrap">
+          <div class="preview-heading"><strong>3B önizleme</strong><span id="preview-label">Model seçilmedi</span></div>
+          <canvas id="model-preview" aria-label="STL 3B önizlemesi"></canvas>
+          <p id="preview-message" class="hint">Önizlemek için bir model seç.</p>
+        </div>
+        <p class="hint export-note">Tinkercad içe aktarma web sitesinde kullanıcı onayı gerektirir; dosya indirilir ve Tinkercad açılır.</p>
+      </div>
+    </section>
+    <footer>Görüntüler ve STL dosyaları bu bilgisayarda saklanır. Tarama/3B üretim servisi bağlı değil.</footer>
+  </main>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
