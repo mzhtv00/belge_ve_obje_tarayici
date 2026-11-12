@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#111827">
+  <title>Telefonla Tara</title>
+  <link rel="stylesheet" href="/static/styles.css">
+  <script src="/static/mobile.js" defer></script>
+</head>
+<body class="mobile-page">
+  <main class="mobile-shell">
+    <a class="brand mobile-brand" href="/"><span class="brand-mark">MS</span><span><strong>Mobil Tarama</strong><small>Telefon kamerası</small></span></a>
+    <section class="card mobile-card">
+      <p class="eyebrow">CANLI ÇEKİM</p>
+      <h1>Tarama oturumuna bağlandın.</h1>
+      <p id="mobile-mode" class="muted">Kamera bağlantısı hazırlanıyor…</p>
+      <div class="camera-frame">
+        <video id="camera-video" autoplay playsinline muted></video>
+        <div id="camera-placeholder" class="camera-placeholder"><span>◎</span><p>Kamerayı başlat veya bir fotoğraf seç.</p></div>
+      </div>
+      <div class="mobile-actions">
+        <button id="start-camera" class="button primary">Kamerayı başlat</button>
+        <button id="take-photo" class="button primary" disabled>Fotoğraf çek</button>
+        <label class="button secondary file-picker"><input id="photo-file" type="file" accept="image/jpeg,image/png,image/webp" capture="environment">Fotoğraf seç</label>
+      </div>
+      <p id="mobile-status" class="mobile-status" role="status" aria-live="polite">Masaüstüyle bağlantı kuruluyor…</p>
+      <p class="hint">JPEG, PNG ve WebP · Görsel başına en fazla 12 MB</p>
+    </section>
+  </main>
+</body>
+</html>
