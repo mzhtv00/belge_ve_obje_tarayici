@@ -18,7 +18,13 @@ dependencies = [
 tesseract = ["pytesseract>=0.3.10"]
 easyocr = ["easyocr>=1.7"]
 photogrammetry = ["open3d>=0.18", "trimesh>=4.0"]
-test = ["pytest>=8"]
+web = [
+    "fastapi>=0.110,<1",
+    "uvicorn[standard]>=0.27,<1",
+    "python-multipart>=0.0.9",
+    "qrcode[pil]>=7.4,<9",
+]
+test = ["pytest>=8", "httpx2>=2,<3"]
 
 [project.scripts]
 object-scan-pipeline = "object_scan_pipeline:main"
@@ -27,7 +33,10 @@ object-scan-pipeline = "object_scan_pipeline:main"
 py-modules = ["object_scan_pipeline"]
 
 [tool.setuptools.packages.find]
-include = ["document_scanner*"]
+include = ["app*", "document_scanner*"]
+
+[tool.setuptools.package-data]
+app = ["static/*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

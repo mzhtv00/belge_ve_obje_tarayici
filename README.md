@@ -3,6 +3,27 @@
 Python 3.11+ modules for scanning photographed documents into corrected,
 searchable files and reconstructing 3D models from turntable photo sets.
 
+## Mobile scanning and CAD handoff app
+
+The FastAPI app connects a phone to a desktop dashboard with a QR code, receives
+images over WebSocket, and supports STL preview and handoff to desktop slicers.
+It stores captures and creates thumbnails; it does not connect the separate
+document OCR or photogrammetry pipelines to the app.
+
+Install the app dependencies and start it from the repository root:
+
+```powershell
+python -m pip install ".[web]"
+python run.py
+```
+
+The dashboard opens in the default browser and listens on port 8000 by default.
+Set `SCANNER_HOST`, `SCANNER_PORT`, or `SCANNER_DATA_DIR` to override the
+listening address, port, or storage directory. A phone can connect over the
+same local network; live camera preview requires HTTPS, while HTTP can use the
+phone browser's file picker. Set `SLICER_EXECUTABLE` to a Cura or PrusaSlicer
+executable when it is not available on `PATH`.
+
 ## Install
 
 Install the base dependencies (document processing) with:
@@ -125,6 +146,6 @@ a user-provided factor when the source dimensions are known.
 ## Tests
 
 ```powershell
-python -m pip install ".[test]"
+python -m pip install ".[web,test]"
 python -m pytest
 ```
